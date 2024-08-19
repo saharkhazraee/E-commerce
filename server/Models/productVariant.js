@@ -27,7 +27,16 @@ const productVariantSchema=new mongoose.Schema({
         default:0,
         min:0,
         max:100
+    },
+    finalPrice:{
+        type:Number,
     }
 },{timestamps:true})
+productVariantSchema.pre('save',(next)=>{
+    if(this.discount){
+        this.finalPrice=this.price-(this.price*(this.discount/100))
+    }
+    next()
+})
 const ProductVariant=mongoose.model("ProductVariant",productVariantSchema)
 export default ProductVariant
