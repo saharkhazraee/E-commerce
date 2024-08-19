@@ -63,7 +63,8 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: [true, "phone is required"],
-        match: [/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/gm, "invalid phone number"]
+        match: [/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/gm, "invalid phone number"],
+        unique:[true,"phone exist"]
     },
     role: {
         type: String,

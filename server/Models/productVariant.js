@@ -32,6 +32,7 @@ const productVariantSchema=new mongoose.Schema({
         type:Number,
     }
 },{timestamps:true})
+// final price calculate
 productVariantSchema.pre('save',(next)=>{
     if(this.discount){
         this.finalPrice=this.price-(this.price*(this.discount/100))
