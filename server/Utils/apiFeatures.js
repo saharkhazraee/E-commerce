@@ -39,6 +39,13 @@ class ApiFeatures{
         return this
 
     }
+    populate(){
+        if(this.queryString.populate){
+            const populateBy=this.queryString.populate.split(',').join(' ')
+            this.query=this.query.populate(populateBy)
+        }
+        return this
+    }
     
 }
 export default ApiFeatures
