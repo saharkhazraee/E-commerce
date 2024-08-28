@@ -18,7 +18,7 @@ const discountCodeSchema = new mongoose.Schema({
     expiredTime:{
         type:String
     },
-    stertTime:{
+    startTime:{
         type:String
     }
 },{timestamps:true})

@@ -1,4 +1,4 @@
-import Category from "../Models/categoryMd";
+import Category from "../Models/categoryMd.js";
 import Product from "../Models/productMd.js";
 import catchAsync from "../Utils/catchAsync.js";
 
