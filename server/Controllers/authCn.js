@@ -19,6 +19,7 @@ export const register = catchAsync(async (req, res, next) => {
     })
 })
 export const login = catchAsync(async (req, res, next) => {
+    console.log("login")
     const { email, password } = req.body;
     const user = await User.findOne({ email })
     const hashPassword = bcryptjs.compareSync(password, user.password)
@@ -57,9 +58,70 @@ export const otp = catchAsync(async (req, res, next) => {
     })
 })
 export const sendSms = catchAsync(async (req, res, next) => {
-
-})
-export const changePassword = catchAsync(async (req, res, next) => {
-
-})
+    const { phone } = jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      process.env.JWT_SECRET
+    );
+    const smsData = await sendAuthCode(phone);
+    return res.status(200).json({
+      status: "success",
+      message: " message send",
+    });
+  }); 
+export const forgetPassword = catchAsync(async (req, res, next) => {
+    const { phone } = req.body;
+    const user = await User.findOne({ phone });
+    if (!user) {
+      return next(new HandleError("user not found", 404));
+    }
+    const smsData = await sendAuthCode(user.phone);
+    return res.status(200).json({
+      status: "success",
+      message: " message send",
+    });
+  });
+  
+  export const verifyOtpForgetPassword = catchAsync(async (req, res, next) => {
+    const { code, phone } = req.body;
+    const smsData = await verifyCode(phone, code);
+    const user = await User.findOne({ phone });
+  
+    if (!smsData.success) {
+      return next(new HandleError("invalid code", 404));
+    }
+    const token = jwt.sign(
+      { id: user._id, role: user.role, loginComplete: true },
+      process.env.JWT_SECRET
+    );
+    return res.status(200).json({
+      status: "success",
+      message: "otp successfully",
+      data:token
+    });
+  });
+  
+  export const newPassword=catchAsync(async (req, res, next) => {
+    const { id } = jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      process.env.JWT_SECRET
+    );
+    const { password } = req.body;
+    const regex =
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/g;
+    if (!regex.test(password)) {
+      return next(new HandleError("invalid password", 400));
+    }
+    const hashPassword = bcryptjs.hashSync(password, 10);
+  const updatedUser=await User.findByIdAndUpdate(id,{password:hashPassword},{new:true})
+    return res.status(200).json({
+      status: "success",
+      message: "password updated successfully",
+      data:{
+        fullName:updatedUser.fullName,
+        email:updatedUser.email,
+        role:updatedUser.role,
+  
+      }
+    })
+  })
 

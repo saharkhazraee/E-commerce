@@ -26,7 +26,7 @@ const addressSchema = new mongoose.Schema({
 const cartSchema = new mongoose.Schema({
     totalPrice: {
         type: Number,
-        default: 0
+       
     },
     items: {
         type: [{
@@ -40,7 +40,7 @@ const cartSchema = new mongoose.Schema({
                 default:1
             }
         }],
-        default: []
+        
     }
 })
 const userSchema = new mongoose.Schema({
@@ -57,8 +57,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "password is required"],
-        minlength: [4, "password must be at least 8 characters"],
-        maxlength: [8, "password must be at most 20 characters"],
+        minLength: [4, "password must be at least 8 characters"],
+        
     },
     phone: {
         type: String,
@@ -73,11 +73,14 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: addressSchema,
-        required: [true, "address is required"]
+        // required: [true, "address is required"]
     },
     cart: {
         type: cartSchema,
-        required:[true,"cart is required"]
+        default:{
+            totalPrice:0,
+            items:[]
+        }
     }
 }, { timestamps: true })
 const User = mongoose.model('User', userSchema)

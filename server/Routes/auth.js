@@ -1,9 +1,11 @@
 import express from 'express'
-import { changePassword, login, otp, register, sendSms } from '../Controllers/authCn.js'
+import {forgetPassword, login, newPassword, otp, register, sendSms, verifyOtpForgetPassword } from '../Controllers/authCn.js'
 const authRouter=express.Router()
 authRouter.route('/').post(login)
 authRouter.route('/register').post(register)
 authRouter.route('/otp').post(otp)
 authRouter.route('/send-sms').post(sendSms)
-authRouter.route('/change-password').post(changePassword)
+authRouter.route('/forget-password').post(forgetPassword)
+authRouter.route('/verify-password').post(verifyOtpForgetPassword)
+authRouter.route('/change-password').post(newPassword)
 export default authRouter
